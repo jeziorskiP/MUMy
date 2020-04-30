@@ -42,7 +42,7 @@ model.add(Dense(classifications, activation='softmax'))
 
 # compile and fit model
 
-sgd = RMSprop(lr=0.01, decay=1e-6)
+sgd = RMSprop(lr=0.0001, decay=1e-6)
 model.compile(loss="categorical_crossentropy", optimizer=sgd, metrics=['accuracy'])
 history = model.fit(x_train, y_train, batch_size=15, epochs=30, validation_data=(x_test, y_test))
 #plot_model(model,to_file='model_plot.png', show_shapes=True, show_layer_names=True)
@@ -54,11 +54,13 @@ ynew = model.predict_classes(x_test, batch_size=15)
 
 rounded_labels=np.argmax(y_test, axis=1)
 
+print("Ilosc xtest", len(x_test))
+print("Ilosc ytest", len(y_test))
 
 labels = [1,2]
 cm = confusion_matrix(rounded_labels, ynew,labels )
 print(cm)
-
+print("Rysuje")
 fig = plt.figure()
 ax = fig.add_subplot(111)
 cax = ax.matshow(cm)
