@@ -9,6 +9,9 @@ from sklearn.metrics import classification_report
 import numpy as np
 from sklearn.metrics import confusion_matrix
 from matplotlib import pyplot as plt
+
+from imblearn.metrics import sensitivity_specificity_support
+
 import os
 os.environ["PATH"] += os.pathsep + 'D:\Programy\Python36\Lib\site-packages\graphviz'
 
@@ -42,7 +45,7 @@ model.add(Dense(classifications, activation='softmax'))
 
 # compile and fit model
 
-sgd = RMSprop(lr=0.1, decay=1e-6)
+sgd = RMSprop(lr=0.001, decay=1e-6)
 model.compile(loss="categorical_crossentropy", optimizer=sgd, metrics=['accuracy'])
 history = model.fit(x_train, y_train, batch_size=15, epochs=100, validation_data=(x_test, y_test))
 #plot_model(model,to_file='model_plot.png', show_shapes=True, show_layer_names=True)
@@ -55,9 +58,11 @@ ynew = model.predict_classes(x_test, batch_size=15)
 #ynew2 = model.predict(x_test,batch_size=15, verbose = 0 )
 
 rounded_labels=np.argmax(y_test, axis=1)
-
+print(len(x_test))
 
 labels = [1,2]
+
+print("Ten Matrix jest jakis dziwny")
 cm = confusion_matrix(rounded_labels, ynew,labels )
 print(cm)
 
@@ -79,19 +84,18 @@ print(classification_report(rounded_labels, ynew) )
 
 
 
-
+print("Ten Matrix jest OK")
 skplt.metrics.plot_confusion_matrix(rounded_labels, ynew, normalize=False)
 plt.show()
 
 probas = model.predict_proba(x_test, batch_size=15)
 
+#krzywa ROC
 skplt.metrics.plot_roc_curve(rounded_labels, probas )  #(y_true, y_probas)
 plt.show()
 
-
-
-
-
+#print("Sens")
+#print(sensitivity_specificity_support(rounded_labels, ynew, average='macro')  )
 
 
 #history = model1.fit(train_x, train_y,validation_split = 0.1, epochs=50, batch_size=4)

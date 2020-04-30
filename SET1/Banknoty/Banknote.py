@@ -48,7 +48,6 @@ history = model.fit(x_train, y_train, batch_size=15, epochs=30, validation_data=
 #plot_model(model,to_file='model_plot.png', show_shapes=True, show_layer_names=True)
 
 
-
 ynew = model.predict_classes(x_test, batch_size=15)
 #ynew2 = model.predict(x_test,batch_size=15, verbose = 0 )
 
@@ -58,9 +57,10 @@ print("Ilosc xtest", len(x_test))
 print("Ilosc ytest", len(y_test))
 
 labels = [1,2]
+
+print("Ten Matrix jest jakis dziwny")
 cm = confusion_matrix(rounded_labels, ynew,labels )
 print(cm)
-print("Rysuje")
 fig = plt.figure()
 ax = fig.add_subplot(111)
 cax = ax.matshow(cm)
@@ -82,22 +82,20 @@ print(classification_report(rounded_labels, ynew) )
 
 
 
+print("Ten Matrix jest OK")
 
-skplt.metrics.plot_confusion_matrix(rounded_labels, ynew, normalize=False)
+skplt.metrics.plot_confusion_matrix(rounded_labels, ynew, normalize=False)      # Nieznormalizowny
 plt.show()
 
 probas = model.predict_proba(x_test, batch_size=15)
+
 
 skplt.metrics.plot_roc_curve(rounded_labels, probas )  #(y_true, y_probas)
 plt.show()
 
 
 
-
-
-
-
-#history = model1.fit(train_x, train_y,validation_split = 0.1, epochs=50, batch_size=4)
+# Wykres dokładnosci
 plt.plot(history.history['accuracy'])
 plt.plot(history.history['val_accuracy'])
 plt.title('model accuracy')
@@ -106,6 +104,7 @@ plt.xlabel('epoch')
 plt.legend(['train', 'val'], loc='upper left')
 plt.show()
 
+# Wykres kosztu
 plt.plot(history.history['loss'])
 plt.plot(history.history['val_loss'])
 plt.title('model loss')
